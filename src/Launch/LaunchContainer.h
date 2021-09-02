@@ -27,6 +27,7 @@
 #include <mutex>
 #include <condition_variable>
 #include <list>
+#include <atomic>
 
 // External
 #include <libmrhbf.h>

@@ -27,7 +27,7 @@ set(CMAKE_CXX_STANDARD 14)
 #  ------------
 #  General simple information about our project.
 ###
-project(mrhpsapp VERSION 1.0
+project(mrhpsapp VERSION 1.0.0
                  DESCRIPTION "MRH application platform service executable"
                  LANGUAGES CXX)
 
@@ -38,12 +38,11 @@ project(mrhpsapp VERSION 1.0
 #########################################################################
 
 ###
-#  Binary Paths
-#  ------------
+#  Install Paths
+#  -------------
 #  The paths for our created binary file(s).
 ###
-set(BIN_DIR_PATH "${CMAKE_SOURCE_DIR}/bin/")
-file(MAKE_DIRECTORY ${BIN_DIR_PATH})
+set(BIN_INSTALL_PATH "/usr/bin/")
 
 ###
 #  Build Paths
@@ -92,26 +91,6 @@ set(SRC_LIST_SERVICE "${SRC_DIR_PATH}/Exception.h"
                      "${SRC_DIR_PATH}/Revision.h"
                      "${SRC_DIR_PATH}/Main.cpp")
 
-###
-#  Library Paths
-#  -------------
-#  The paths to the external libraries to use. 
-#  Both the binary and include paths should be set here.
-#  Add OS specific libraries in their own lists.
-###
-set(LIB_DIR_PATH "${CMAKE_SOURCE_DIR}/lib/")
-set(INCLUDE_DIR_PATH "${CMAKE_SOURCE_DIR}/include/")
-
-set(LIB_BIN_LIST "${LIB_DIR_PATH}/libmrhev.a"
-                 "${LIB_DIR_PATH}/libmrhcevs.a"
-                 "${LIB_DIR_PATH}/libmrhbf.a"
-                 "${LIB_DIR_PATH}/libmrhpsb.a")
-set(LIB_INCLUDE_LIST "${INCLUDE_DIR_PATH}/mrhshared"
-                     "${INCLUDE_DIR_PATH}/libmrhev"
-                     "${INCLUDE_DIR_PATH}/libmrhcevs"
-                     "${INCLUDE_DIR_PATH}/libmrhbf"
-                     "${INCLUDE_DIR_PATH}/libmrhpsb")
-
 #########################################################################
 #
 #  TARGET
@@ -127,25 +106,40 @@ add_executable(mrhpsapp ${SRC_LIST_CALLBACK}
                         ${SRC_LIST_LAUNCH}
                         ${SRC_LIST_DEFAULT_APP}
                         ${SRC_LIST_SERVICE})
-set_target_properties(mrhpsapp
-                      PROPERTIES
-                      ARCHIVE_OUTPUT_DIRECTORY ${BIN_DIR_PATH}
-                      LIBRARY_OUTPUT_DIRECTORY ${BIN_DIR_PATH}
-                      RUNTIME_OUTPUT_DIRECTORY ${BIN_DIR_PATH})
 
 ###
 #  Required Libraries
 #  ------------------
 #  Libraries required by this platform service.
 ###
-target_link_libraries(mrhpsapp PUBLIC ${LIB_BIN_LIST})
-include_directories(${LIB_INCLUDE_LIST})
+set(CMAKE_THREAD_PREFER_PTHREAD TRUE)
+set(THREADS_PREFER_PTHREAD_FLAG TRUE)
+
+find_package(Threads REQUIRED)
+find_library(libmrhbf NAMES mrhbf REQUIRED)
+find_library(libmrhev NAMES mrhev REQUIRED)
+find_library(libmrhcevs NAMES mrhcevs REQUIRED)
+find_library(libmrhpsb NAMES mrhpsb REQUIRED)
+
+target_link_libraries(mrhpsapp PUBLIC Threads::Threads)
+target_link_libraries(mrhpsapp PUBLIC mrhbf)
+target_link_libraries(mrhpsapp PUBLIC mrhev)
+target_link_libraries(mrhpsapp PUBLIC mrhcevs)
+target_link_libraries(mrhpsapp PUBLIC mrhpsb)
 
 ###
 #  Source Definitions
 #  ------------------
 #  Preprocessor source definitions.
 ###
-target_compile_definitions(mrhpsapp PRIVATE MRH_APP_SERVICE_THREAD_COUNT=2)
+target_compile_definitions(mrhpsapp PRIVATE MRH_APP_SERVICE_THREAD_COUNT=1)
 target_compile_definitions(mrhpsapp PRIVATE MRH_APP_SERVICE_DEFAULT_APP_FILE_PATH="/etc/mrhpservice/Application.conf")
 target_compile_definitions(mrhpsapp PRIVATE MRH_APP_SERVICE_TIMED_LAUNCH_FILE_PATH="/var/mrhpsapp/TimedLaunch.mrhbf")
+
+###
+#  Install
+#  -------
+#  Application installation.
+###
+install(TARGETS mrhpsapp
+        DESTINATION ${BIN_INSTALL_PATH})

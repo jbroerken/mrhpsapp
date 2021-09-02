@@ -73,7 +73,8 @@ namespace
 // Constructor / Destructor
 //*************************************************************************************
 
-LaunchContainer::LaunchContainer() : s_OwnerPackagePath("")
+LaunchContainer::LaunchContainer() : s_OwnerPackagePath(""),
+                                     b_Update(true)
 {
     try
     {
