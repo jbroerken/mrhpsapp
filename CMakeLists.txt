@@ -42,7 +42,7 @@ project(mrhpsapp VERSION 1.0.0
 #  -------------
 #  The paths for our created binary file(s).
 ###
-set(BIN_INSTALL_PATH "/usr/bin/")
+set(BIN_INSTALL_PATH "/usr/local/bin/")
 
 ###
 #  Build Paths
@@ -133,8 +133,8 @@ target_link_libraries(mrhpsapp PUBLIC mrhpsb)
 #  Preprocessor source definitions.
 ###
 target_compile_definitions(mrhpsapp PRIVATE MRH_APP_SERVICE_THREAD_COUNT=1)
-target_compile_definitions(mrhpsapp PRIVATE MRH_APP_SERVICE_DEFAULT_APP_FILE_PATH="/etc/mrhpservice/Application.conf")
-target_compile_definitions(mrhpsapp PRIVATE MRH_APP_SERVICE_TIMED_LAUNCH_FILE_PATH="/var/mrhpsapp/TimedLaunch.mrhbf")
+target_compile_definitions(mrhpsapp PRIVATE MRH_APP_SERVICE_DEFAULT_APP_FILE_PATH="/usr/local/etc/mrh/mrhpservice/Application.conf")
+target_compile_definitions(mrhpsapp PRIVATE MRH_APP_SERVICE_TIMED_LAUNCH_FILE_PATH="/var/mrh/mrhpsapp/TimedLaunch.mrhbf")
 
 ###
 #  Install
