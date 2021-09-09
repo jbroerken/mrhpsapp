@@ -30,7 +30,7 @@
 
 // Pre-defined
 #ifndef MRH_APP_SERVICE_TIMED_LAUNCH_FILE_PATH
-    #define MRH_APP_SERVICE_TIMED_LAUNCH_FILE_PATH "/var/mrhpsapp/TimedLaunch.mrhbf"
+    #define MRH_APP_SERVICE_TIMED_LAUNCH_FILE_PATH "/var/mrh/mrhpsapp/TimedLaunch.mrhbf"
 #endif
 #define LAUNCH_WAIT_TIMEOUT_S 900
 

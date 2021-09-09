@@ -29,7 +29,7 @@
 
 // Pre-defined
 #ifndef MRH_APP_SERVICE_DEFAULT_APP_FILE_PATH
-    #define MRH_APP_SERVICE_DEFAULT_APP_FILE_PATH "/etc/mrhpservice/Application.conf"
+    #define MRH_APP_SERVICE_DEFAULT_APP_FILE_PATH "/usr/local/etc/mrh/mrhpservice/Application.conf"
 #endif
 
 namespace
