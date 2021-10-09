@@ -9,8 +9,7 @@
 ##
 
 The mrhpsapp project provides the default application platform service for the MRH platform.
-It manages application launches (both instant and timed) as well as the default applications 
-defined for the MRH platform.
+It manages application launches (both instant and timed) for the MRH platform.
 
 
 ##
