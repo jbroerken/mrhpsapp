@@ -140,7 +140,7 @@ void LaunchContainer::TimedUpdate(LaunchContainer* p_Instance) noexcept
         // Check usable requests
         p_Instance->c_RequestMutex.lock();
         
-        for (auto It = l_TimedLaunch.begin(); It != l_TimedLaunch.end(); ++It)
+        for (auto It = l_TimedLaunch.begin(); It != l_TimedLaunch.end();)
         {
             if (It->GetTimepointS() <= time(NULL))
             {
@@ -167,6 +167,9 @@ void LaunchContainer::TimedUpdate(LaunchContainer* p_Instance) noexcept
                 {
                     us_TimeoutS = us_TimeS;
                 }
+                
+                // Next to check
+                ++It;
             }
         }
         
@@ -192,11 +195,15 @@ void LaunchContainer::Clear() noexcept
     std::lock_guard<std::mutex> c_Guard(c_RequestMutex);
     
     // Remove launches for package
-    for (auto It = l_TimedLaunch.begin(); It != l_TimedLaunch.end(); ++It)
+    for (auto It = l_TimedLaunch.begin(); It != l_TimedLaunch.end();)
     {
         if (It->GetOwnerPackagePath().compare(s_OwnerPackagePath) == 0)
         {
             It = l_TimedLaunch.erase(It);
+        }
+        else
+        {
+            ++It;
         }
     }
     
