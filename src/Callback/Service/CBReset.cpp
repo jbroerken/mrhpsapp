@@ -26,7 +26,6 @@
 
 // Project
 #include "./CBReset.h"
-#include "../../DefaultApp/DefaultAppFile.h"
 
 
 //*************************************************************************************
@@ -47,7 +46,6 @@ void CBReset::Callback(const MRH_EVBase* p_Event, MRH_Uint32 u32_GroupID) noexce
 {
     try
     {
-        DefaultAppFile::Singleton().Write();
         p_Container->SetOwnerPackagePath(static_cast<const MRH_SYS_PS_RESET_REQUEST_U*>(p_Event)->GetString());
     }
     catch (Exception& e)

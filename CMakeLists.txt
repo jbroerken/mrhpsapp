@@ -73,19 +73,12 @@ set(SRC_LIST_CALLBACK "${SRC_DIR_PATH}/Callback/Service/CBAvail.cpp"
                       "${SRC_DIR_PATH}/Callback/Launch/CBClearLaunchSOA.cpp"
                       "${SRC_DIR_PATH}/Callback/Launch/CBClearLaunchSOA.h"
                       "${SRC_DIR_PATH}/Callback/Launch/CBClearLaunchSOATimer.cpp"
-                      "${SRC_DIR_PATH}/Callback/Launch/CBClearLaunchSOATimer.h"
-                      "${SRC_DIR_PATH}/Callback/DefaultApp/CBGetDefault.cpp"
-                      "${SRC_DIR_PATH}/Callback/DefaultApp/CBGetDefault.h"
-                      "${SRC_DIR_PATH}/Callback/DefaultApp/CBSetDefault.cpp"
-                      "${SRC_DIR_PATH}/Callback/DefaultApp/CBSetDefault.h")
+                      "${SRC_DIR_PATH}/Callback/Launch/CBClearLaunchSOATimer.h")
                       
 set(SRC_LIST_LAUNCH "${SRC_DIR_PATH}/Launch/TimedLaunch.cpp"
                     "${SRC_DIR_PATH}/Launch/TimedLaunch.h"
                     "${SRC_DIR_PATH}/Launch/LaunchContainer.cpp"
                     "${SRC_DIR_PATH}/Launch/LaunchContainer.h")
-                      
-set(SRC_LIST_DEFAULT_APP "${SRC_DIR_PATH}/DefaultApp/DefaultAppFile.cpp"
-                         "${SRC_DIR_PATH}/DefaultApp/DefaultAppFile.h")
                      
 set(SRC_LIST_SERVICE "${SRC_DIR_PATH}/Exception.h"
                      "${SRC_DIR_PATH}/Revision.h"
@@ -104,7 +97,6 @@ set(SRC_LIST_SERVICE "${SRC_DIR_PATH}/Exception.h"
 ###
 add_executable(mrhpsapp ${SRC_LIST_CALLBACK}
                         ${SRC_LIST_LAUNCH}
-                        ${SRC_LIST_DEFAULT_APP}
                         ${SRC_LIST_SERVICE})
 
 ###
@@ -133,7 +125,6 @@ target_link_libraries(mrhpsapp PUBLIC mrhpsb)
 #  Preprocessor source definitions.
 ###
 target_compile_definitions(mrhpsapp PRIVATE MRH_APP_SERVICE_THREAD_COUNT=1)
-target_compile_definitions(mrhpsapp PRIVATE MRH_APP_SERVICE_DEFAULT_APP_FILE_PATH="/usr/local/etc/mrh/mrhpservice/Application.conf")
 target_compile_definitions(mrhpsapp PRIVATE MRH_APP_SERVICE_TIMED_LAUNCH_FILE_PATH="/var/mrh/mrhpsapp/TimedLaunch.mrhbf")
 
 ###

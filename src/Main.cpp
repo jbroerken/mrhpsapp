@@ -33,15 +33,12 @@
 #include "./Callback/Launch/CBLaunchSOATimer.h"
 #include "./Callback/Launch/CBClearLaunchSOA.h"
 #include "./Callback/Launch/CBClearLaunchSOATimer.h"
-#include "./Callback/DefaultApp/CBGetDefault.h"
-#include "./Callback/DefaultApp/CBSetDefault.h"
 #include "./Launch/LaunchContainer.h"
-#include "./DefaultApp/DefaultAppFile.h"
 #include "./Revision.h"
 
 // Pre-defined
 #ifndef MRH_APP_SERVICE_THREAD_COUNT
-    #define MRH_APP_SERVICE_THREAD_COUNT 2
+    #define MRH_APP_SERVICE_THREAD_COUNT 1
 #endif
 
 
@@ -97,17 +94,6 @@ int main(int argc, const char* argv[])
     
     try
     {
-        DefaultAppFile::Singleton().Read();
-    }
-    catch (MRH_PSBException& e)
-    {
-        // Continue, we write on reset
-        c_Logger.Log(MRH_PSBLogger::WARNING, e.what(),
-                     "Main.cpp", __LINE__);
-    }
-    
-    try
-    {
         std::shared_ptr<LaunchContainer> p_LaunchContainer(new LaunchContainer());
         
         std::shared_ptr<MRH_Callback> p_CBAvail(new CBAvail());
@@ -118,8 +104,6 @@ int main(int argc, const char* argv[])
         std::shared_ptr<MRH_Callback> p_CBLaunchSOATimer(new CBLaunchSOATimer(p_LaunchContainer));
         std::shared_ptr<MRH_Callback> p_CBClearLaunchSOA(new CBClearLaunchSOA());
         std::shared_ptr<MRH_Callback> p_CBClearLaunchSOATimer(new CBClearLaunchSOATimer(p_LaunchContainer));
-        std::shared_ptr<MRH_Callback> p_CBGetDefault(new CBGetDefault());
-        std::shared_ptr<MRH_Callback> p_CBSetDefault(new CBSetDefault());
         
         p_Context->AddCallback(p_CBAvail, MRH_EVENT_APP_AVAIL_U);
         p_Context->AddCallback(p_CBReset, MRH_EVENT_PS_RESET_REQUEST_U);
@@ -129,8 +113,6 @@ int main(int argc, const char* argv[])
         p_Context->AddCallback(p_CBLaunchSOATimer, MRH_EVENT_APP_LAUNCH_SOA_TIMER_U);
         p_Context->AddCallback(p_CBClearLaunchSOA, MRH_EVENT_APP_LAUNCH_SOA_CLEAR_U);
         p_Context->AddCallback(p_CBClearLaunchSOATimer, MRH_EVENT_APP_LAUNCH_SOA_CLEAR_TIMER_U);
-        p_Context->AddCallback(p_CBGetDefault, MRH_EVENT_APP_GET_DEFAULT_PACKAGE_U);
-        p_Context->AddCallback(p_CBSetDefault, MRH_EVENT_APP_SET_DEFAULT_PACKAGE_U);
     }
     catch (MRH_PSBException& e)
     {
