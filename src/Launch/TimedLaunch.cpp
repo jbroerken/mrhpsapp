@@ -34,11 +34,11 @@
 TimedLaunch::TimedLaunch(std::string const& s_OwnerPackagePath,
                          std::string const& s_LaunchPackagePath,
                          std::string const& s_LaunchInput,
-                         int i_LaunchCommandID,
+                         MRH_Sint32 s32_LaunchCommandID,
                          MRH_Uint64 u64_TimepointS) : s_OwnerPackagePath(s_OwnerPackagePath),
                                                       s_LaunchPackagePath(s_LaunchPackagePath),
                                                       s_LaunchInput(s_LaunchInput),
-                                                      i_LaunchCommandID(i_LaunchCommandID),
+                                                      s32_LaunchCommandID(s32_LaunchCommandID),
                                                       u64_TimepointS(u64_TimepointS)
 {
     if (s_OwnerPackagePath.size() == 0)
@@ -75,7 +75,7 @@ std::string TimedLaunch::GetLaunchInput() const noexcept
 
 int TimedLaunch::GetLaunchCommandID() const noexcept
 {
-    return i_LaunchCommandID;
+    return s32_LaunchCommandID;
 }
 
 MRH_Uint64 TimedLaunch::GetTimepointS() const noexcept

@@ -42,16 +42,27 @@ CBClearLaunchSOA::~CBClearLaunchSOA() noexcept
 // Callback
 //*************************************************************************************
 
-void CBClearLaunchSOA::Callback(const MRH_EVBase* p_Event, MRH_Uint32 u32_GroupID) noexcept
+void CBClearLaunchSOA::Callback(const MRH_Event* p_Event, MRH_Uint32 u32_GroupID) noexcept
 {
+    MRH_Event* p_Result = MRH_EVD_CreateEvent(MRH_EVENT_APP_LAUNCH_SOA_CLEAR_S, NULL, 0);
+    
+    if (p_Result == NULL)
+    {
+        MRH_PSBLogger::Singleton().Log(MRH_PSBLogger::ERROR, "Failed to create response event!",
+                                       "CBClearLaunchSOA.cpp", __LINE__);
+        return;
+    }
+    
+    p_Result->u32_GroupID = u32_GroupID;
+    
     try
     {
-        MRH_A_LAUNCH_SOA_CLEAR_U c_Result;
-        MRH_EventStorage::Singleton().Add(c_Result, u32_GroupID);
+        MRH_EventStorage::Singleton().Add(p_Result);
     }
     catch (MRH_PSBException& e)
     {
         MRH_PSBLogger::Singleton().Log(MRH_PSBLogger::ERROR, e.what(),
                                        "CBClearLaunchSOA.cpp", __LINE__);
+        MRH_EVD_DestroyEvent(p_Result);
     }
 }

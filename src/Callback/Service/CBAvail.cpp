@@ -27,15 +27,6 @@
 // Project
 #include "./CBAvail.h"
 
-// Pre-defined
-namespace
-{
-    // Service identification
-    constexpr MRH_Uint32 u32_SupplierID = 0x4d524800;
-    constexpr MRH_Uint32 u32_BinaryID = 0x41505000;
-    constexpr MRH_Uint32 u32_Version = 1;
-}
-
 
 //*************************************************************************************
 // Constructor / Destructor
@@ -51,19 +42,41 @@ CBAvail::~CBAvail() noexcept
 // Callback
 //*************************************************************************************
 
-void CBAvail::Callback(const MRH_EVBase* p_Event, MRH_Uint32 u32_GroupID) noexcept
+void CBAvail::Callback(const MRH_Event* p_Event, MRH_Uint32 u32_GroupID) noexcept
 {
+    MRH_Event* p_Result = MRH_EVD_CreateEvent(MRH_EVENT_APP_AVAIL_S, NULL, 0);
+    
+    if (p_Result == NULL)
+    {
+        MRH_PSBLogger::Singleton().Log(MRH_PSBLogger::ERROR, "Failed to create response event!",
+                                       "CBAvail.cpp", __LINE__);
+        return;
+    }
+    
+    p_Result->u32_GroupID = u32_GroupID;
+    
+    MRH_EvD_A_ServiceAvail_S c_Data;
+    c_Data.u8_Available = MRH_EVD_BASE_RESULT_SUCCESS;
+    c_Data.u32_SupplierID = 0x4d524800;
+    c_Data.u32_BinaryID = 0x41505000;
+    c_Data.u32_Version = 1;
+    
+    if (MRH_EVD_SetEvent(p_Result, MRH_EVENT_APP_AVAIL_S, &c_Data) < 0)
+    {
+        MRH_PSBLogger::Singleton().Log(MRH_PSBLogger::ERROR, "Failed to set response event!",
+                                       "CBAvail.cpp", __LINE__);
+        MRH_EVD_DestroyEvent(p_Result);
+        return;
+    }
+    
     try
     {
-        MRH_A_AVAIL_S c_Result(true,
-                               u32_SupplierID,
-                               u32_BinaryID,
-                               u32_Version);
-        MRH_EventStorage::Singleton().Add(c_Result, u32_GroupID);
+        MRH_EventStorage::Singleton().Add(p_Result);
     }
     catch (MRH_PSBException& e)
     {
         MRH_PSBLogger::Singleton().Log(MRH_PSBLogger::ERROR, e.what(),
                                        "CBAvail.cpp", __LINE__);
+        MRH_EVD_DestroyEvent(p_Result);
     }
 }

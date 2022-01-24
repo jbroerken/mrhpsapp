@@ -42,19 +42,28 @@ CBLaunchSOA::~CBLaunchSOA() noexcept
 // Callback
 //*************************************************************************************
 
-void CBLaunchSOA::Callback(const MRH_EVBase* p_Event, MRH_Uint32 u32_GroupID) noexcept
+void CBLaunchSOA::Callback(const MRH_Event* p_Event, MRH_Uint32 u32_GroupID) noexcept
 {
+    MRH_Event* p_Result = MRH_EVD_CopyEvent(p_Event);
+    
+    if (p_Result == NULL)
+    {
+        MRH_PSBLogger::Singleton().Log(MRH_PSBLogger::ERROR, "Failed to create response event!",
+                                       "CBLaunchSOA.cpp", __LINE__);
+        return;
+    }
+    
+    p_Result->u32_Type = MRH_EVENT_APP_LAUNCH_SOA_S;
+    p_Result->u32_GroupID = u32_GroupID;
+    
     try
     {
-        const MRH_A_LAUNCH_SOA_U* p_Cast = static_cast<const MRH_A_LAUNCH_SOA_U*>(p_Event);
-        MRH_A_LAUNCH_SOA_S c_Result(p_Cast->GetPackagePath(),
-                                    p_Cast->GetLaunchInput(),
-                                    p_Cast->GetLaunchCommandID());
-        MRH_EventStorage::Singleton().Add(c_Result, u32_GroupID);
+        MRH_EventStorage::Singleton().Add(p_Result);
     }
     catch (MRH_PSBException& e)
     {
         MRH_PSBLogger::Singleton().Log(MRH_PSBLogger::ERROR, e.what(),
                                        "CBLaunchSOA.cpp", __LINE__);
+        MRH_EVD_DestroyEvent(p_Result);
     }
 }

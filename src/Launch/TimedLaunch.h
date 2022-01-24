@@ -45,14 +45,14 @@ public:
      *  \param s_OwnerPackagePath The full package path for the application creating the launch.
      *  \param s_LaunchPackagePath The full package path for the application to launch.
      *  \param s_LaunchInput The UTF-8 launch input to supply to the application.
-     *  \param i_LaunchCommandID The launch command id to supply to the application.
+     *  \param s32_LaunchCommandID The launch command id to supply to the application.
      *  \param u64_TimepointS The time point in seconds to send the launch event.
      */
     
     TimedLaunch(std::string const& s_OwnerPackagePath,
                 std::string const& s_LaunchPackagePath,
                 std::string const& s_LaunchInput,
-                int i_LaunchCommandID,
+                MRH_Sint32 s32_LaunchCommandID,
                 MRH_Uint64 u64_TimepointS);
     
     /**
@@ -95,7 +95,7 @@ public:
      *  \return The launch command id.
      */
     
-    int GetLaunchCommandID() const noexcept;
+    MRH_Sint32 GetLaunchCommandID() const noexcept;
     
     /**
      *  Get the launch time point.
@@ -114,7 +114,7 @@ private:
     std::string s_OwnerPackagePath;
     std::string s_LaunchPackagePath;
     std::string s_LaunchInput;
-    int i_LaunchCommandID;
+    MRH_Sint32 s32_LaunchCommandID;
     MRH_Uint64 u64_TimepointS;
     
 protected:

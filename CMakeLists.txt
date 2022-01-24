@@ -110,13 +110,13 @@ set(THREADS_PREFER_PTHREAD_FLAG TRUE)
 find_package(Threads REQUIRED)
 find_library(libmrhbf NAMES mrhbf REQUIRED)
 find_library(libmrhev NAMES mrhev REQUIRED)
-find_library(libmrhcevs NAMES mrhcevs REQUIRED)
+find_library(libmrhevdata NAMES mrhevdata REQUIRED)
 find_library(libmrhpsb NAMES mrhpsb REQUIRED)
 
 target_link_libraries(mrhpsapp PUBLIC Threads::Threads)
 target_link_libraries(mrhpsapp PUBLIC mrhbf)
 target_link_libraries(mrhpsapp PUBLIC mrhev)
-target_link_libraries(mrhpsapp PUBLIC mrhcevs)
+target_link_libraries(mrhpsapp PUBLIC mrhevdata)
 target_link_libraries(mrhpsapp PUBLIC mrhpsb)
 
 ###

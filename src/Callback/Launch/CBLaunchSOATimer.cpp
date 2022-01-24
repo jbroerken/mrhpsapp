@@ -42,27 +42,43 @@ CBLaunchSOATimer::~CBLaunchSOATimer() noexcept
 // Callback
 //*************************************************************************************
 
-void CBLaunchSOATimer::Callback(const MRH_EVBase* p_Event, MRH_Uint32 u32_GroupID) noexcept
+void CBLaunchSOATimer::Callback(const MRH_Event* p_Event, MRH_Uint32 u32_GroupID) noexcept
 {
+    MRH_EvD_A_LaunchSOATimer_U c_Data;
+    
+    if (MRH_EVD_ReadEvent(&c_Data, MRH_EVENT_APP_LAUNCH_SOA_TIMER_U, p_Event) < 0)
+    {
+        MRH_PSBLogger::Singleton().Log(MRH_PSBLogger::ERROR, "Failed to read request event!",
+                                       "CBLaunchSOATimer.cpp", __LINE__);
+        return;
+    }
+    
+    MRH_Event* p_Result = MRH_EVD_CopyEvent(p_Event);
+    
+    if (p_Result == NULL)
+    {
+        MRH_PSBLogger::Singleton().Log(MRH_PSBLogger::ERROR, "Failed to create response event!",
+                                       "CBLaunchSOATimer.cpp", __LINE__);
+        return;
+    }
+    
+    p_Result->u32_Type = MRH_EVENT_APP_LAUNCH_SOA_TIMER_S;
+    p_Result->u32_GroupID = u32_GroupID;
+    
     try
     {
-        const MRH_A_LAUNCH_SOA_TIMER_U* p_Cast = static_cast<const MRH_A_LAUNCH_SOA_TIMER_U*>(p_Event);
-        
         p_Container->Add(TimedLaunch(p_Container->GetOwnerPackagePath(),
-                                     p_Cast->GetPackagePath(),
-                                     p_Cast->GetLaunchInput(),
-                                     p_Cast->GetLaunchCommandID(),
-                                     p_Cast->GetTimepointS()));
+                                     c_Data.p_PackagePath,
+                                     c_Data.p_LaunchInput,
+                                     c_Data.s32_LaunchCommandID,
+                                     c_Data.u64_LaunchTimepointS));
         
-        MRH_A_LAUNCH_SOA_TIMER_S c_Result(p_Cast->GetPackagePath(),
-                                          p_Cast->GetLaunchInput(),
-                                          p_Cast->GetLaunchCommandID(),
-                                          p_Cast->GetTimepointS());
-        MRH_EventStorage::Singleton().Add(c_Result, u32_GroupID);
+        MRH_EventStorage::Singleton().Add(p_Result);
     }
     catch (std::exception& e) // Container and event creation, both result in no event
     {
         MRH_PSBLogger::Singleton().Log(MRH_PSBLogger::ERROR, e.what(),
                                        "CBLaunchSOATimer.cpp", __LINE__);
+        MRH_EVD_DestroyEvent(p_Result);
     }
 }
