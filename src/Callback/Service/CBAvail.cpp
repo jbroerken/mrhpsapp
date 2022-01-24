@@ -44,7 +44,13 @@ CBAvail::~CBAvail() noexcept
 
 void CBAvail::Callback(const MRH_Event* p_Event, MRH_Uint32 u32_GroupID) noexcept
 {
-    MRH_Event* p_Result = MRH_EVD_CreateEvent(MRH_EVENT_APP_AVAIL_S, NULL, 0);
+    MRH_EvD_A_ServiceAvail_S c_Data;
+    c_Data.u8_Available = MRH_EVD_BASE_RESULT_SUCCESS;
+    c_Data.u32_SupplierID = 0x4d524800;
+    c_Data.u32_BinaryID = 0x41505000;
+    c_Data.u32_Version = 1;
+    
+    MRH_Event* p_Result = MRH_EVD_CreateSetEvent(MRH_EVENT_APP_AVAIL_S, &c_Data);
     
     if (p_Result == NULL)
     {
@@ -54,20 +60,6 @@ void CBAvail::Callback(const MRH_Event* p_Event, MRH_Uint32 u32_GroupID) noexcep
     }
     
     p_Result->u32_GroupID = u32_GroupID;
-    
-    MRH_EvD_A_ServiceAvail_S c_Data;
-    c_Data.u8_Available = MRH_EVD_BASE_RESULT_SUCCESS;
-    c_Data.u32_SupplierID = 0x4d524800;
-    c_Data.u32_BinaryID = 0x41505000;
-    c_Data.u32_Version = 1;
-    
-    if (MRH_EVD_SetEvent(p_Result, MRH_EVENT_APP_AVAIL_S, &c_Data) < 0)
-    {
-        MRH_PSBLogger::Singleton().Log(MRH_PSBLogger::ERROR, "Failed to set response event!",
-                                       "CBAvail.cpp", __LINE__);
-        MRH_EVD_DestroyEvent(p_Result);
-        return;
-    }
     
     try
     {

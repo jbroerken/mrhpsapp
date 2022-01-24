@@ -178,8 +178,7 @@ void LaunchContainer::TimedUpdate(LaunchContainer* p_Instance) noexcept
             
             c_LaunchData.s32_LaunchCommandID = It->GetLaunchCommandID();
             
-            if ((p_Launch = MRH_EVD_CreateEvent(MRH_EVENT_APP_LAUNCH_SOA_S, NULL, 0)) == NULL ||
-                MRH_EVD_SetEvent(p_Launch, MRH_EVENT_APP_LAUNCH_SOA_S, &c_LaunchData) < 0 ||
+            if ((p_Launch = MRH_EVD_CreateSetEvent(MRH_EVENT_APP_LAUNCH_SOA_S, &c_LaunchData)) == NULL ||
                 (p_Reminder = MRH_EVD_CreateEvent(MRH_EVENT_APP_LAUNCH_SOA_TIMER_REMINDER_S, NULL, 0)) == NULL)
             {
                 p_Launch = MRH_EVD_DestroyEvent(p_Launch); // @NOTE: Checks NULL
