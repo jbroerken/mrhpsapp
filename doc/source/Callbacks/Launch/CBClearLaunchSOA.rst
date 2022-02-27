@@ -6,13 +6,15 @@ clear launch event.
 Action
 ------
 The callback will create the clear launch response event by 
-mirroring the recieved event. The event is added directly to 
-the events to be sent to the currently used package.
+mirroring the recieved event and setting the event type to that 
+of a service event. The event is added directly to the events to 
+be sent to the currently used package.
 
-The mirrored event will be seen by mrhcore, which only clears a 
-set launch when the event is sent as a service event from 
-the service side. The copied event will have its clear launch event 
-type set to a service clear launch event.
+.. note::
+
+    The mirrored event will be seen by mrhcore, which only clears a 
+    currently set launch when the event is sent as a service event 
+    from the service side.
 
 Recieved Events
 ---------------

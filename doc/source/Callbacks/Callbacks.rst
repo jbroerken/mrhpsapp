@@ -10,9 +10,9 @@ Service Callbacks
 .. toctree::
   :maxdepth: 1
 
-  Service/CBAvail
-  Service/CBReset
-  Service/CBCustomCommand
+  Service Availability <Service/CBAvail>
+  Service Reset <Service/CBReset>
+  Custom Command <Service/CBCustomCommand>
   
   
 Launch Callbacks
@@ -20,7 +20,7 @@ Launch Callbacks
 .. toctree::
   :maxdepth: 1
 
-  Launch/CBLaunchSOA
-  Launch/CBLaunchSOATimer
-  Launch/CBClearLaunchSOA
-  Launch/CBClearLaunchSOATimer
+  Request Launch <Launch/CBLaunchSOA>
+  Request Timed Launch <Launch/CBLaunchSOATimer>
+  Clear Launch <Launch/CBClearLaunchSOA>
+  Clear Timed Launch <Launch/CBClearLaunchSOATimer>
