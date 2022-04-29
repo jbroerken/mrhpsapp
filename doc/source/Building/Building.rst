@@ -46,9 +46,23 @@ Build Process
 -------------
 The build process should be relatively straightforward:
 
-1. Compile Makefiles with the included CMakeLists.txt
-2. Move to the "build" folder and run make.
-3. Now run make install to move the binary to its location.
-4. Acquire and install any required files from the mrh_os_files 
+1. Aqquire dependencies.
+2. Move into the project "build" folder.
+3. Compile Makefiles with the included CMakeLists.txt.
+4. Run "make" to compile the binary.
+5. Install the compiled binary.
+6. Acquire and install any required files from the mrh_os_files 
    (https://github.com/jbroerken/mrh_os_files/) repository.
-   
+
+Shell Commands
+--------------
+The following shell commands will create makefiles with the 
+provided CMakeLists.txt, compile the project with the created 
+makefiles and install the binary:
+
+.. code-block::
+
+    cd <Project Root Folder>/build
+    cmake ..
+    make
+    sudo make install
